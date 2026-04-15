@@ -160,13 +160,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Обновляем счетчик пользователей
-    const users = JSON.parse(localStorage.getItem('axioma_users') || '[]');
-    const usersCountEl = document.getElementById('users-count');
-    if (usersCountEl) {
-        usersCountEl.textContent = users.length;
-    }
 });
+
+// Firebase - получаем реальное количество пользователей
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBb8-MxoxLmaJccD8hv89RXAefSkWfFKc0",
+    authDomain: "pitchdlc-b5446.firebaseapp.com",
+    projectId: "pitchdlc-b5446",
+    storageBucket: "pitchdlc-b5446.firebasestorage.app",
+    messagingSenderId: "652141326687",
+    appId: "1:652141326687:web:c1693de93ffaf89d57c6ea",
+    measurementId: "G-GTGFQGZSLL"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Получаем количество пользователей из Firestore
+async function updateUsersCount() {
+    try {
+        const usersCollection = collection(db, "users");
+        const usersSnapshot = await getDocs(usersCollection);
+        const usersCount = usersSnapshot.size;
+        
+        const usersCountEl = document.getElementById('users-count');
+        if (usersCountEl) {
+            usersCountEl.textContent = usersCount;
+        }
+    } catch (error) {
+        console.log("Ошибка загрузки счетчика:", error);
+    }
+}
+
+updateUsersCount();
 // Lightbox функции
 function openLightbox(src) {
     document.getElementById('lightbox-img').src = src;
