@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pitchDLC - Главная</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">pitchDLC</a>
+            <div class="nav-links">
+                <a href="pokupka.html" class="nav-link">Скачать</a>
+                <a href="#advantages" class="nav-link" onclick="document.getElementById('advantages').scrollIntoView({behavior: 'smooth'}); return false;">Преимущества</a>
+                <a href="login.html" class="nav-link btn-login" id="nav-login">Войти</a>
+                <a href="profile.html" class="nav-link" id="nav-profile" style="display:none; color: var(--primary);"></a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <h1 class="hero-title">Начни свою игру с <span class="highlight">pitchDLC</span></h1>
+            <p class="hero-subtitle">Клиент с лучшими обходами под такие сервера как SpookyTime, FunTime, ReallyWorld и другие</p>
+            <div class="hero-buttons">
+                <a href="pokupka.html" class="btn btn-primary">Скачать</a>
+            </div>
+        </div>
+        <div class="hero-glow"></div>
+    </header>
+
+    <section class="advantages" id="advantages">
+        <div class="container">
+            <h2 class="section-title">Наши преимущества</h2>
+            <p class="section-subtitle">Почему стоит выбрать именно наш клиент</p>
+            
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3 class="advantage-title">Лучшие обходы</h3>
+                    <p class="advantage-text">Наши уникальные обходы античитов обеспечивают максимальную защиту и стабильную работу на популярных серверах</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <h3 class="advantage-title">Высокая производительность</h3>
+                    <p class="advantage-text">Оптимизированный код обеспечивает плавную работу даже на слабых компьютерах</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="advantage-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9H11a8.48 8.48 0 0 1 8 8v.5z"/>
+                        </svg>
+                    </div>
+                    <h3 class="advantage-title">Лучшие визуалы</h3>
+                    <p class="advantage-text">самые лучшие визуалы среди бесплатных читов</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <h2 class="section-title">Информация</h2>
+            <p class="section-subtitle">Краткая информация</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number" id="users-count">0</span>
+                    <span class="stat-label">количество пользователей</span>
+                    <p class="stat-text">Зарегистрированных аккаунтов в системе pitchDLC</p>
+                </div>
+                
+                <div class="stat-card">
+                    <span class="stat-number">365+</span>
+                    <span class="stat-label">дней работы</span>
+                    <p class="stat-text">Более года стабильной работы и постоянных улучшений клиента для вашего комфорта</p>
+                </div>
+                
+                <div class="stat-card">
+                    <span class="stat-number">30+</span>
+                    <span class="stat-label">количество функций</span>
+                    <p class="stat-text">30+ работающих функций и регулярное исправление багов</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="screenshots">
+        <div class="container">
+            <h2 class="section-title">Скриншоты клиента</h2>
+            <p class="section-subtitle">Взгляните на интерфейс и возможности нашего клиента в деле. На скриншотах показан: интерфейс, гуи и другое.</p>
+            
+            <div class="screenshots-grid">
+                <div class="screenshot-card" onclick="openLightbox('Screenshot_186.png')">
+                    <img src="Screenshot_186.png" alt="Скриншот клиента 1">
+                </div>
+                <div class="screenshot-card" onclick="openLightbox('Screenshot_187.png')">
+                    <img src="Screenshot_187.png" alt="Скриншот клиента 2">
+                </div>
+            </div>
+
+            <!-- Lightbox -->
+            <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+                <span class="lightbox-close">&times;</span>
+                <img id="lightbox-img" src="" alt="Увеличенный скриншот">
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Навигация</h4>
+                    <a href="register.html">Присоединиться</a>
+                    <a href="login.html">Логин</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Связь</h4>
+                    <span class="footer-note">Ссылку укажете сами</span>
+                    <a href="https://t.me/axiomadlc" target="_blank">Telegram</a>
+                    <a href="https://discord.gg/HYKEVNtnqp" target="_blank">Discord</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 pitchDLC. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+// Проверяем авторизацию при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUser = localStorage.getItem('axioma_user');
+    const navLogin = document.getElementById('nav-login');
+    const navProfile = document.getElementById('nav-profile');
+    
+    if (currentUser) {
+        const user = JSON.parse(currentUser);
+        if (navLogin) navLogin.style.display = 'none';
+        if (navProfile) {
+            navProfile.textContent = user.username;
+            navProfile.style.display = 'inline-block';
+        }
+    }
+    
+    // Обновляем счетчик пользователей
+    const users = JSON.parse(localStorage.getItem('axioma_users') || '[]');
+    const usersCountEl = document.getElementById('users-count');
+    if (usersCountEl) {
+        usersCountEl.textContent = users.length;
+    }
+});
+// Lightbox функции
+function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Закрытие по Escape
+ document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeLightbox();
+    }
+});
+</script>
+
+<style>
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    cursor: zoom-out;
+}
+.lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+.lightbox-close:hover {
+    opacity: 1;
+}
+.screenshot-card {
+    cursor: zoom-in;
+}
+</style>
+</body>
+</html>

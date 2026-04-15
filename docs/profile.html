@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pitchDLC - Профиль</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .profile-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .profile-header {
+            margin-bottom: 30px;
+        }
+        .profile-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .profile-header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .profile-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+        .profile-user-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+        .profile-avatar-wrapper {
+            position: relative;
+            cursor: pointer;
+        }
+        .profile-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+        }
+        .profile-avatar:hover {
+            border-color: var(--primary);
+        }
+        .avatar-placeholder {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+            border: 2px solid var(--border);
+        }
+        .avatar-upload-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .avatar-upload-overlay svg {
+            width: 12px;
+            height: 12px;
+            color: white;
+        }
+        .profile-avatar-wrapper:hover .avatar-upload-overlay {
+            opacity: 1;
+        }
+        #avatar-input {
+            display: none;
+        }
+        .profile-user-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .profile-user-details p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .profile-section-title {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .profile-section-title svg {
+            width: 14px;
+            height: 14px;
+        }
+        .profile-info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .profile-info-row:last-child {
+            border-bottom: none;
+        }
+        .profile-info-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .profile-info-label svg {
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+        }
+        .profile-info-value {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .profile-actions-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+        .btn-outline-dark {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        .btn-outline-dark:hover {
+            background: var(--bg-hover);
+            border-color: var(--primary);
+        }
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+        .partner-banner {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0.05) 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .partner-banner-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .partner-banner-content p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .not-logged {
+            text-align: center;
+            padding: 100px 40px;
+        }
+        .not-logged h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">pitchDLC</a>
+            <div class="nav-links">
+                <a href="pokupka.html" class="nav-link">Скачать</a>
+                <a href="index.html#advantages" class="nav-link">Преимущества</a>
+                <a href="profile.html" class="nav-link" id="nav-profile" style="display:none; color: var(--primary);"></a>
+                <a href="login.html" class="nav-link btn-login" id="nav-login">Войти</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" style="min-height: 80vh; padding-top: 100px;">
+        <div class="container">
+            <div class="profile-wrapper" id="profile-content" style="display: none;">
+                <div class="profile-header">
+                    <h1>Аккаунт</h1>
+                    <p>Управление настройками аккаунта</p>
+                </div>
+
+                <!-- Карточка пользователя с аватаркой -->
+                <div class="profile-card">
+                    <div class="profile-user-info">
+                        <div class="profile-avatar-wrapper" onclick="document.getElementById('avatar-input').click()">
+                            <div class="avatar-placeholder" id="profile-avatar">A</div>
+                            <div class="avatar-upload-overlay">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                            </div>
+                            <input type="file" id="avatar-input" accept="image/*" onchange="uploadAvatar(this)">
+                        </div>
+                        <div class="profile-user-details">
+                            <h3 id="profile-username">Username</h3>
+                            <p id="profile-email">email@example.com</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Данные аккаунта -->
+                <div class="profile-card">
+                    <div class="profile-section-title">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Данные аккаунта
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label"># UID</span>
+                        <span class="profile-info-value" id="profile-user-id">74601</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            Роль
+                        </span>
+                        <span class="profile-info-value">Пользователь</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                                <polyline points="10 17 15 12 10 7"/>
+                                <line x1="15" y1="12" x2="3" y2="12"/>
+                            </svg>
+                            Логин
+                        </span>
+                        <span class="profile-info-value" id="profile-login">torusternal</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                            Почта
+                        </span>
+                        <span class="profile-info-value" id="profile-email-display">dragunovla48@gmail.com</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            Зарегистрирован
+                        </span>
+                        <span class="profile-info-value" id="profile-reg-date-full">15.04.2026 г. 11:27</span>
+                    </div>
+                </div>
+
+                <!-- Действия -->
+                <div class="profile-card">
+                    <div class="profile-actions-row">
+                        <a href="pokupka.html" class="btn btn-primary btn-small">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px; margin-right: 6px; vertical-align: middle;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Скачать
+                        </a>
+                        <button class="btn btn-outline-dark btn-small">Сменить пароль</button>
+                        <button class="btn btn-danger btn-small" onclick="logout()">Выйти</button>
+                    </div>
+                </div>
+
+            </div>
+            
+            <div id="not-logged-content" class="not-logged" style="display: none;">
+                <h2 class="hero-title">Вы не авторизованы</h2>
+                <p class="hero-subtitle" style="margin-bottom: 30px;">Войдите или зарегистрируйтесь чтобы увидеть профиль</p>
+                <div class="hero-buttons">
+                    <a href="login.html" class="btn btn-primary">Войти</a>
+                    <a href="register.html" class="btn btn-outline">Регистрация</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-glow"></div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Навигация</h4>
+                    <a href="register.html">Присоединиться</a>
+                    <a href="login.html">Логин</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Связь</h4>
+                    <span class="footer-note">Ссылку укажете сами</span>
+                    <a href="https://t.me/axiomadlc" target="_blank">Telegram</a>
+                    <a href="https://discord.gg/HYKEVNtnqp" target="_blank">Discord</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 pitchDLC. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+// Проверка авторизации при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUser = localStorage.getItem('axioma_user');
+    const profileContent = document.getElementById('profile-content');
+    const notLoggedContent = document.getElementById('not-logged-content');
+    const navLogin = document.getElementById('nav-login');
+    const navProfile = document.getElementById('nav-profile');
+    
+    if (currentUser) {
+        const user = JSON.parse(currentUser);
+        const users = JSON.parse(localStorage.getItem('axioma_users') || '[]');
+        const fullUser = users.find(u => u.username === user.username);
+        
+        // Показываем профиль
+        profileContent.style.display = 'block';
+        
+        // Заполняем данные
+        document.getElementById('profile-username').textContent = user.username;
+        document.getElementById('profile-email').textContent = user.email;
+        document.getElementById('profile-login').textContent = user.username;
+        document.getElementById('profile-email-display').textContent = user.email;
+        
+        // Аватарка - проверяем сохраненную
+        const savedAvatar = localStorage.getItem('axioma_avatar_' + user.username);
+        const avatarEl = document.getElementById('profile-avatar');
+        if (savedAvatar) {
+            avatarEl.innerHTML = '<img src="' + savedAvatar + '" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">';
+        } else {
+            avatarEl.textContent = user.username.charAt(0).toUpperCase();
+        }
+        
+        // ID пользователя
+        const userId = fullUser && fullUser.uid ? fullUser.uid : (users.findIndex(u => u.username === user.username) + 1);
+        document.getElementById('profile-user-id').textContent = userId;
+        
+        // Дата регистрации
+        if (fullUser && fullUser.registered) {
+            const date = new Date(fullUser.registered);
+            const dateStr = date.toLocaleDateString('ru-RU') + ' г. ' + date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
+            const dateEl = document.getElementById('profile-reg-date-full');
+            if (dateEl) dateEl.textContent = dateStr;
+        }
+        
+        // Обновляем навигацию
+        navLogin.style.display = 'none';
+        navProfile.textContent = user.username;
+        navProfile.style.display = 'inline-block';
+    } else {
+        // Показываем сообщение о необходимости входа
+        notLoggedContent.style.display = 'block';
+    }
+});
+
+// Загрузка аватарки
+function uploadAvatar(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const currentUser = JSON.parse(localStorage.getItem('axioma_user'));
+            if (currentUser) {
+                // Сохраняем аватарку
+                localStorage.setItem('axioma_avatar_' + currentUser.username, e.target.result);
+                
+                // Обновляем отображение
+                const avatarEl = document.getElementById('profile-avatar');
+                avatarEl.innerHTML = '<img src="' + e.target.result + '" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">';
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// Выход
+function logout() {
+    localStorage.removeItem('axioma_user');
+    window.location.href = 'index.html';
+}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBb8-MxoxLmaJccD8hv89RXAefSkWfFKc0",
+    authDomain: "pitchdlc-b5446.firebaseapp.com",
+    projectId: "pitchdlc-b5446",
+    storageBucket: "pitchdlc-b5446.firebasestorage.app",
+    messagingSenderId: "652141326687",
+    appId: "1:652141326687:web:c1693de93ffaf89d57c6ea",
+    measurementId: "G-GTGFQGZSLL"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Проверяем авторизацию Firebase
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+        // Получаем данные из Firestore
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        const userData = userDoc.data();
+        
+        if (userData) {
+            document.getElementById('profile-username').textContent = userData.username;
+            document.getElementById('profile-email').textContent = userData.email;
+            document.getElementById('profile-login').textContent = userData.username;
+            document.getElementById('profile-email-display').textContent = userData.email;
+            document.getElementById('profile-user-id').textContent = user.uid.substring(0, 8);
+            
+            // Дата регистрации
+            if (userData.registered) {
+                const date = userData.registered.toDate();
+                const dateStr = date.toLocaleDateString('ru-RU') + ' г. ' + date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
+                const dateEl = document.getElementById('profile-reg-date-full');
+                if (dateEl) dateEl.textContent = dateStr;
+            }
+        }
+    }
+});
+
+// Выход через Firebase
+window.logout = async function() {
+    await signOut(auth);
+    localStorage.removeItem('axioma_user');
+    window.location.href = 'index.html';
+};
+</script>
+</body>
+</html>
