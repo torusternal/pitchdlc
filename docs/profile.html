@@ -347,85 +347,6 @@
         </div>
     </footer>
 
-<script>
-// Проверка авторизации при загрузке
-document.addEventListener('DOMContentLoaded', function() {
-    const currentUser = localStorage.getItem('axioma_user');
-    const profileContent = document.getElementById('profile-content');
-    const notLoggedContent = document.getElementById('not-logged-content');
-    const navLogin = document.getElementById('nav-login');
-    const navProfile = document.getElementById('nav-profile');
-    
-    if (currentUser) {
-        const user = JSON.parse(currentUser);
-        const users = JSON.parse(localStorage.getItem('axioma_users') || '[]');
-        const fullUser = users.find(u => u.username === user.username);
-        
-        // Показываем профиль
-        profileContent.style.display = 'block';
-        
-        // Заполняем данные
-        document.getElementById('profile-username').textContent = user.username;
-        document.getElementById('profile-email').textContent = user.email;
-        document.getElementById('profile-login').textContent = user.username;
-        document.getElementById('profile-email-display').textContent = user.email;
-        
-        // Аватарка - проверяем сохраненную
-        const savedAvatar = localStorage.getItem('axioma_avatar_' + user.username);
-        const avatarEl = document.getElementById('profile-avatar');
-        if (savedAvatar) {
-            avatarEl.innerHTML = '<img src="' + savedAvatar + '" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">';
-        } else {
-            avatarEl.textContent = user.username.charAt(0).toUpperCase();
-        }
-        
-        // ID пользователя
-        const userId = fullUser && fullUser.uid ? fullUser.uid : (users.findIndex(u => u.username === user.username) + 1);
-        document.getElementById('profile-user-id').textContent = userId;
-        
-        // Дата регистрации
-        if (fullUser && fullUser.registered) {
-            const date = new Date(fullUser.registered);
-            const dateStr = date.toLocaleDateString('ru-RU') + ' г. ' + date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
-            const dateEl = document.getElementById('profile-reg-date-full');
-            if (dateEl) dateEl.textContent = dateStr;
-        }
-        
-        // Обновляем навигацию
-        navLogin.style.display = 'none';
-        navProfile.textContent = user.username;
-        navProfile.style.display = 'inline-block';
-    } else {
-        // Показываем сообщение о необходимости входа
-        notLoggedContent.style.display = 'block';
-    }
-});
-
-// Загрузка аватарки
-function uploadAvatar(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const currentUser = JSON.parse(localStorage.getItem('axioma_user'));
-            if (currentUser) {
-                // Сохраняем аватарку
-                localStorage.setItem('axioma_avatar_' + currentUser.username, e.target.result);
-                
-                // Обновляем отображение
-                const avatarEl = document.getElementById('profile-avatar');
-                avatarEl.innerHTML = '<img src="' + e.target.result + '" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">';
-            }
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-
-// Выход
-function logout() {
-    localStorage.removeItem('axioma_user');
-    window.location.href = 'index.html';
-}
-</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -446,8 +367,17 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Проверяем авторизацию Firebase
+const profileContent = document.getElementById('profile-content');
+const notLoggedContent = document.getElementById('not-logged-content');
+const navLogin = document.getElementById('nav-login');
+const navProfile = document.getElementById('nav-profile');
+
 onAuthStateChanged(auth, async (user) => {
     if (user) {
+        // Показываем профиль
+        profileContent.style.display = 'block';
+        notLoggedContent.style.display = 'none';
+        
         // Получаем данные из Firestore
         const userDoc = await getDoc(doc(db, "users", user.uid));
         const userData = userDoc.data();
@@ -459,6 +389,28 @@ onAuthStateChanged(auth, async (user) => {
             document.getElementById('profile-email-display').textContent = userData.email;
             document.getElementById('profile-user-id').textContent = user.uid.substring(0, 8);
             
+            // Сохраняем в localStorage для навигации
+            localStorage.setItem('axioma_user', JSON.stringify({
+                username: userData.username,
+                email: userData.email
+            }));
+            
+            // Обновляем навигацию
+            if (navLogin) navLogin.style.display = 'none';
+            if (navProfile) {
+                navProfile.textContent = userData.username;
+                navProfile.style.display = 'inline-block';
+            }
+            
+            // Аватарка
+            const savedAvatar = localStorage.getItem('axioma_avatar_' + userData.username);
+            const avatarEl = document.getElementById('profile-avatar');
+            if (savedAvatar) {
+                avatarEl.innerHTML = '<img src="' + savedAvatar + '" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">';
+            } else {
+                avatarEl.textContent = userData.username.charAt(0).toUpperCase();
+            }
+            
             // Дата регистрации
             if (userData.registered) {
                 const date = userData.registered.toDate();
@@ -467,6 +419,10 @@ onAuthStateChanged(auth, async (user) => {
                 if (dateEl) dateEl.textContent = dateStr;
             }
         }
+    } else {
+        // Показываем сообщение о необходимости входа
+        profileContent.style.display = 'none';
+        notLoggedContent.style.display = 'block';
     }
 });
 
@@ -475,6 +431,22 @@ window.logout = async function() {
     await signOut(auth);
     localStorage.removeItem('axioma_user');
     window.location.href = 'index.html';
+};
+
+// Загрузка аватарки
+window.uploadAvatar = function(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const currentUser = JSON.parse(localStorage.getItem('axioma_user'));
+            if (currentUser) {
+                localStorage.setItem('axioma_avatar_' + currentUser.username, e.target.result);
+                const avatarEl = document.getElementById('profile-avatar');
+                avatarEl.innerHTML = '<img src="' + e.target.result + '" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">';
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 };
 </script>
 </body>

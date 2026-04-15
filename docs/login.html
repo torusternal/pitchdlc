@@ -126,39 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
-
-
-document.getElementById('login-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const username = document.getElementById('login-username').value;
-    const password = document.getElementById('login-password').value;
-    const errorDiv = document.getElementById('login-error');
-    
-    errorDiv.style.display = 'none';
-    
-    // Получаем пользователей
-    const users = JSON.parse(localStorage.getItem('axioma_users') || '[]');
-    
-    // Ищем пользователя
-    const user = users.find(u => u.username === username && u.password === password);
-    
-    if (!user) {
-        errorDiv.textContent = 'Неверный логин или пароль';
-        errorDiv.style.display = 'block';
-        return;
-    }
-    
-    // Сохраняем текущего пользователя
-    localStorage.setItem('axioma_user', JSON.stringify({
-        username: user.username,
-        email: user.email,
-        loginTime: new Date().toISOString()
-    }));
-    
-    // Перенаправляем на главную
-    window.location.href = 'index.html';
-});
 </script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
