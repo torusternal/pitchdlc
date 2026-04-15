@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pitchDLC - Регистрация</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .form-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        .form-link a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">pitchDLC</a>
+            <div class="nav-links">
+                <a href="pokupka.html" class="nav-link">Скачать</a>
+                <a href="index.html#advantages" class="nav-link">Преимущества</a>
+                <a href="login.html" class="nav-link btn-login" id="nav-login">Войти</a>
+                <a href="profile.html" class="nav-link" id="nav-profile" style="display:none; color: var(--primary);"></a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" style="min-height: 70vh;">
+        <div class="container">
+            <h1 class="hero-title" style="font-size: 36px; margin-bottom: 30px;">Создать аккаунт</h1>
+            
+            <div class="form-container">
+                <form id="register-form">
+                    <div class="form-group">
+                        <label class="form-label">Логин</label>
+                        <input type="text" class="form-input" id="reg-username" placeholder="Придумайте логин" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" id="reg-email" placeholder="Введите email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" class="form-input" id="reg-password" placeholder="Придумайте пароль" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Повторите пароль</label>
+                        <input type="password" class="form-input" id="reg-password2" placeholder="Повторите пароль" required>
+                    </div>
+                    <div id="reg-error" style="color: #ef4444; margin-bottom: 16px; font-size: 14px; display: none;"></div>
+                    <div id="reg-success" style="color: #22c55e; margin-bottom: 16px; font-size: 14px; display: none;">Регистрация успешна! Перенаправление...</div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Зарегистрироваться</button>
+                </form>
+                <div class="form-link">
+                    Уже есть аккаунт? <a href="login.html">Войти</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-glow"></div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Навигация</h4>
+                    <a href="register.html">Присоединиться</a>
+                    <a href="login.html">Логин</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Связь</h4>
+                    <span class="footer-note">Ссылку укажете сами</span>
+                    <a href="https://t.me/axiomadlc" target="_blank">Telegram</a>
+                    <a href="https://discord.gg/HYKEVNtnqp" target="_blank">Discord</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 pitchDLC. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+<script>
+// Проверка авторизации при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    const currentUser = localStorage.getItem('axioma_user');
+    const navLogin = document.getElementById('nav-login');
+    const navProfile = document.getElementById('nav-profile');
+    
+    if (currentUser) {
+        const user = JSON.parse(currentUser);
+        if (navLogin) navLogin.style.display = 'none';
+        if (navProfile) {
+            navProfile.textContent = user.username;
+            navProfile.style.display = 'inline-block';
+        }
+    }
+});
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBb8-MxoxLmaJccD8hv89RXAefSkWfFKc0",
+    authDomain: "pitchdlc-b5446.firebaseapp.com",
+    projectId: "pitchdlc-b5446",
+    storageBucket: "pitchdlc-b5446.firebasestorage.app",
+    messagingSenderId: "652141326687",
+    appId: "1:652141326687:web:c1693de93ffaf89d57c6ea",
+    measurementId: "G-GTGFQGZSLL"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+// Firebase регистрация
+document.getElementById('register-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('reg-username').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    const password2 = document.getElementById('reg-password2').value;
+    const errorDiv = document.getElementById('reg-error');
+    const successDiv = document.getElementById('reg-success');
+    
+    errorDiv.style.display = 'none';
+    successDiv.style.display = 'none';
+    
+    if (password !== password2) {
+        errorDiv.textContent = 'Пароли не совпадают';
+        errorDiv.style.display = 'block';
+        return;
+    }
+    
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        await updateProfile(user, { displayName: username });
+        
+        // Сохраняем в Firestore
+        await setDoc(doc(db, "users", user.uid), {
+            uid: user.uid,
+            username: username,
+            email: email,
+            registered: serverTimestamp()
+        });
+        
+        // Сохраняем локально для быстрого доступа
+        localStorage.setItem('axioma_user', JSON.stringify({
+            username: username,
+            email: email
+        }));
+        
+        successDiv.style.display = 'block';
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+    } catch (error) {
+        errorDiv.textContent = 'Ошибка: ' + error.message;
+        errorDiv.style.display = 'block';
+    }
+});
+</script>
+</body>
+</html>
